@@ -2,15 +2,19 @@
 const express = require('express');
 const app = express();
 const userRoutes = require('./routes/user.routes'); // Import các route cho người dùng
+const authRoutes = require('./routes/auth.routes'); // Import các route cho xác thực người dùng
 const logger = require('./middlewares/logger'); // Import middleware logger
+const authMiddleware = require('./middlewares/auth'); // Import middleware xác thực
 require('dotenv').config(); // load biến môi trường
 
 /* ------------------------------- middleware ------------------------------- */
 app.use(express.json()); // Middleware để parse JSON từ request body
 app.use(logger); // Sử dụng middleware logger để ghi log các request
+app.use(authMiddleware); // Sử dụng middleware xác thực cho tất cả các route
 
 /* ------------------------------- routes ---------------------------------- */
 app.use('/users', userRoutes); // Sử dụng các route cho người dùng
+app.use('/auth', authRoutes); // Sử dụng các route cho người dùng
 app.get('/', (req, res) => {
   res.send('Chào mừng đến với Express.js!');
 });
